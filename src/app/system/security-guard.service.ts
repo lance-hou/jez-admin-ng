@@ -14,7 +14,11 @@ export class SecurityGuard implements CanActivate {
     if (this.securityService.isLogin) {
       return true;
     }
-    this.router.navigate(['/login']);
+    if (state.url === '/') {
+      this.router.navigate(['/login']);
+    } else {
+      this.router.navigate(['/login', {next: state.url}]);
+    }
     return false;
   }
 }

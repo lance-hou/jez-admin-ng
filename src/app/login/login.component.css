@@ -3,5 +3,22 @@
 }
 
 .login-container {
-  background: #eee;
+  width: 350px;
+  padding: 10px;
+}
+
+.verify-code-control {
+  width: 60%;
+}
+
+.verify-code-container {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 20px 0 20px 20px;
+  width: calc(40% - 20px);
+}
+
+.verify-code-container > img {
+  width: 100%;
+  cursor: pointer;
 }

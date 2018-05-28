@@ -1,5 +1,34 @@
 <div fxLayout="column" fxLayoutAlign="center" class="login-wrapper">
-  <div fxFlex="0 0 auto" class="login-container">
-    login works!
+  <div fxLayout fxLayoutAlign="center" fxFlex="none">
+    <div fxFlex="none" fxFlex.xs class="login-container">
+      <form [formGroup]="form" (ngSubmit)="login()" class="s-form">
+        <mat-form-field class="s-form-control">
+          <input formControlName="username" matInput placeholder="用户名">
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+        <mat-form-field class="s-form-control">
+          <input formControlName="password" matInput [type]="showPassword ? 'text' : 'password'" placeholder="密 码">
+          <mat-icon matSuffix (click)="showPassword = !showPassword" class="s-cursor-pointer">
+            {{showPassword ? 'visibility_off' : 'visibility'}}
+          </mat-icon>
+        </mat-form-field>
+        <div *ngIf="loginVerifyCodeMode">
+          <mat-form-field class="verify-code-control">
+            <input ormControlName="verifyCode" matInput placeholder="验证码">
+            <mat-icon matSuffix>security</mat-icon>
+          </mat-form-field>
+          <div class="verify-code-container">
+            <img src="/subjects/verifyCode?_t={{_t}}" (click)="updateTimestamp()">
+          </div>
+        </div>
+        <button
+          [disabled]="loginVerifyCodeMode === undefined || form.invalid"
+          mat-raised-button
+          color="primary"
+          class="s-btn-block">
+          登录
+        </button>
+      </form>
+    </div>
   </div>
 </div>

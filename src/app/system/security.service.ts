@@ -1,24 +1,35 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {map} from 'rxjs/operators';
 
-import {delay, tap} from 'rxjs/operators';
+const FORM_DATA_HEADER = {headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')};
 
 @Injectable()
 export class SecurityService {
 
-  isLogin = false;
+  isLogin = localStorage.getItem('isLogin') === '1';
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
   }
 
-  login(): Observable<boolean> {
-    return of(true).pipe(
-      delay(1000),
-      tap(val => this.isLogin = true)
-    );
+  login(username: string, password: string, verifyCode?: string): Promise<void> {
+    const params = new HttpParams().set('username', username).set('password', password).set('verifyCode', verifyCode);
+    return this.httpClient.post('/login', params.toString(), FORM_DATA_HEADER)
+      .pipe(
+        map(response => {
+          this.isLogin = true;
+          localStorage.setItem('isLogin', '1');
+        })
+      ).toPromise();
   }
 
-  logout(): void {
+  logout(remote = true): void {
+    if (remote) {
+      this.httpClient.post('/logout', null).toPromise().catch(() => {
+      });
+    }
     this.isLogin = false;
+    localStorage.removeItem('isLogin');
   }
+
 }

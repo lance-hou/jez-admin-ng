@@ -1,0 +1,15 @@
+.s-cursor-pointer {
+  cursor: pointer;
+}
+
+.s-btn-block {
+  display: block !important;
+  width: 100%;
+}
+
+.s-form {
+}
+
+.s-form .s-form-control {
+  display: block;
+}

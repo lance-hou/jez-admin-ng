@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
   MatButtonModule,
@@ -14,25 +14,41 @@ import {
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {LayoutModule} from '@angular/cdk/layout';
+import {MessageContainerComponent} from './message/message-container/message-container.component';
+import {MessageService} from './message/message.service';
 
-const MAT_MODULES = [
-  MatButtonModule,
+const IMPORTS = [
+  CommonModule,
+  MatCardModule,
   MatIconModule,
+  FlexLayoutModule
+];
+
+const EXPORTS = [
+  ...IMPORTS,
+  FormsModule,
+  ReactiveFormsModule,
+  MatButtonModule,
   MatListModule,
   MatGridListModule,
-  MatCardModule,
   MatInputModule,
   MatFormFieldModule,
   MatToolbarModule,
   MatSnackBarModule,
-  LayoutModule,
-  FlexLayoutModule
+  LayoutModule
 ];
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [],
-  exports: [CommonModule, FormsModule, ReactiveFormsModule, ...MAT_MODULES]
+  imports: [...IMPORTS],
+  declarations: [MessageContainerComponent],
+  entryComponents: [MessageContainerComponent],
+  exports: [...EXPORTS]
 })
 export class SharedModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SharedModule,
+      providers: [MessageService]
+    };
+  }
 }

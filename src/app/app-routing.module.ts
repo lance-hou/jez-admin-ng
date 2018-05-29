@@ -3,8 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {NavLayoutComponent} from './nav-layout/nav-layout.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {SecurityGuard} from './system/security-guard.service';
-import {SecurityService} from './system/security.service';
+import {SecurityGuard} from './system/security/security-guard.service';
+import {SecurityService} from './system/security/security.service';
 
 const routes: Routes = [
   {

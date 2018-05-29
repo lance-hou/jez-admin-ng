@@ -15,7 +15,7 @@
         <div *ngIf="loginVerifyCodeMode">
           <mat-form-field class="verify-code-control">
             <input ormControlName="verifyCode" matInput placeholder="验证码">
-            <mat-icon matSuffix>security</mat-icon>
+            <mat-icon matSuffix>image</mat-icon>
           </mat-form-field>
           <div class="verify-code-container">
             <img src="/subjects/verifyCode?_t={{_t}}" (click)="updateTimestamp()">

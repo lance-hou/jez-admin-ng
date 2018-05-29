@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
-import {SecurityService} from '../system/security.service';
+import {SecurityService} from '../system/security/security.service';
 import {ConfigService} from '../system/configs/config.service';
+import {MessageService} from '../shared/message/message.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private configService: ConfigService,
               private securityService: SecurityService,
-              private snackBar: MatSnackBar,
+              private messageService: MessageService,
               private router: Router,
               private route: ActivatedRoute) {
   }
@@ -46,10 +46,11 @@ export class LoginComponent implements OnInit {
   login() {
     const verifyCode = this.loginVerifyCodeMode !== false ? this.form.get('verifyCode').value : null;
     this.securityService.login(this.form.get('username').value, this.form.get('password').value, verifyCode).then(result => {
-      this.snackBar.open('登录成功！', null, {duration: 1500});
+      this.messageService.success('登录成功！');
+      console.log(this.router, this.next);
       this.router.navigate([this.next]);
     }).catch(error => {
-      this.snackBar.open('用户名或密码错误！', null, {duration: 1500});
+      this.messageService.error('用户名或密码错误！');
       if (this.loginVerifyCodeMode) {
         this.updateTimestamp();
       }

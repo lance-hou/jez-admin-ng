@@ -1,0 +1,3 @@
+<mat-accordion *ngIf="root">
+  <app-nav-sub-menu [menus]="root.children" (menuClick)="menuClick.emit($event)"></app-nav-sub-menu>
+</mat-accordion>

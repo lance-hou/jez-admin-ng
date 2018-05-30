@@ -1,0 +1,47 @@
+<mat-sidenav-container *ngIf="initialized" class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="true"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary">
+      <mat-icon>filter_drama</mat-icon>
+      <span style="padding-left: 10px">JEZ Admin</span>
+    </mat-toolbar>
+    <div class="nav-menu-container">
+      <app-nav-menu [root]="rootMenu" (menuClick)="active($event)"></app-nav-menu>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="s-flex-fill"></span>
+      <mat-menu #userMenu [overlapTrigger]="false">
+        <button mat-menu-item>
+          <mat-icon>perm_identity</mat-icon>
+          <span>个人资料</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>security</mat-icon>
+          <span>修改密码</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>
+          <mat-icon>power_settings_new</mat-icon>
+          <span>注销登录</span>
+        </button>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <span>{{user.username}}</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

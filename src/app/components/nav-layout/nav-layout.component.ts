@@ -8,6 +8,7 @@ import {Menu} from '../nav-menu/menu';
 import {Resource} from '../../modules/system/resources/resource';
 import {Router} from '@angular/router';
 import {SECURITY_OPTIONS, SecurityOptions} from '../../modules/system/security/security-options';
+import {MessageService} from '../../modules/shared/message/message.service';
 
 @Component({
   selector: 'app-nav-layout',
@@ -26,13 +27,14 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
   initialized = false;
 
   user: User;
-  rootMenu: Menu;
+  menus: Menu;
   activeMenu: Menu;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     @Inject(SECURITY_OPTIONS) private securityOptions: SecurityOptions,
     private securityService: SecurityService,
+    private messageService: MessageService,
     private router: Router) {
   }
 
@@ -45,6 +47,12 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
     this.authorizationSubscription.unsubscribe();
   }
 
+  logout() {
+    this.securityService.logout();
+    this.messageService.info('注销成功！');
+    this.router.navigate([this.securityOptions.loginUrl]);
+  }
+
   active(menu: Menu, doNavigation = true) {
     if (this.activeMenu !== undefined) {
       this.activeMenu.selected = false;
@@ -52,8 +60,7 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
     this.activeMenu = menu;
     this.activeMenu.selected = true;
     if (doNavigation) {
-      this.router.navigate([menu.path])
-        .catch(() => this.router.navigate([this.securityOptions.notFoundUrl, {url: menu.path}]));
+      this.router.navigate([menu.path]);
     }
   }
 
@@ -105,7 +112,7 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
         defaultMenu = menu;
       }
     });
-    this.rootMenu = root;
+    this.menus = root ? root.children : null;
     const noRouter = routerUrl === '/', activeMenu = noRouter ? defaultMenu || firstMenu : routerMenu;
     if (activeMenu !== null) {
       parent = activeMenu.parent;

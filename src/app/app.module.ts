@@ -12,10 +12,8 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {SharedModule} from './modules/shared/shared.module';
 import {NgMaterialMultilevelMenuModule} from 'ng-material-multilevel-menu';
 import {NavMenuComponent} from './components/nav-menu/nav-menu.component';
-import {NavSubMenuComponent} from './components/nav-sub-menu/nav-sub-menu.component';
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {ForbiddenComponent} from './components/forbidden/forbidden.component';
-import {ErrorComponent} from './components/error/error.component';
 import {HandleErrorInterceptor} from './http/handle-error-interceptor';
 
 @NgModule({
@@ -25,10 +23,8 @@ import {HandleErrorInterceptor} from './http/handle-error-interceptor';
     NavLayoutComponent,
     NavMenuComponent,
     DashboardComponent,
-    NavSubMenuComponent,
     NotFoundComponent,
-    ForbiddenComponent,
-    ErrorComponent
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,

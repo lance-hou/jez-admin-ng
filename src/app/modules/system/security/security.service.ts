@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {finalize, tap} from 'rxjs/operators';
 import {Subject} from './subject';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 
 const FORM_DATA_HEADER = {headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')};
 
@@ -22,42 +22,45 @@ export class SecurityService {
   constructor(private httpClient: HttpClient) {
   }
 
-  login(username: string, password: string, verifyCode?: string): Promise<any> {
+  login(username: string, password: string, verifyCode?: string): Observable<any> {
     const params = new HttpParams().set('username', username).set('password', password).set('verifyCode', verifyCode);
     return this.httpClient.post('/login', params.toString(), FORM_DATA_HEADER)
       .pipe(
         tap(() => this._authenticated = true),
         tap(() => localStorage.setItem('authenticated', 'true'))
-      ).toPromise();
+      );
   }
 
   logout(remote = true): void {
     if (remote) {
       this.httpClient.post('/logout', null).pipe(
-        finalize(() => {
-          this._authenticated = false;
-          this._authorized = false;
-          this._subject = null;
-          this.menus = null;
-          this.permissions = null;
-          this.groups = null;
-          localStorage.removeItem('authenticated');
-        })
+        finalize(this.clear)
       );
+    } else {
+      this.clear();
     }
   }
 
-  authorize(): Promise<any> {
+  private clear() {
+    this._authenticated = false;
+    this._authorized = false;
+    this._subject = null;
+    this.menus = null;
+    this.permissions = null;
+    this.groups = null;
+    localStorage.removeItem('authenticated');
+  }
+
+  authorize(): Observable<any> {
     return this.httpClient.get<Subject>('/subjects').pipe(
-      tap(subject => {
-        this._subject = subject;
-        this.menus = subject.resources.filter(resource => !resource.pathExp === false).map(resource => resource.pathExp);
-        this.permissions = subject.resources.filter(resource => !resource.permission === false).map(resource => resource.permission);
-        this.groups = subject.groups.filter(group => !group.code === false).map(group => group.code);
-        this._authorized = true;
-        this.eventEmitter.emit(subject);
-      })
-    ).toPromise();
+      tap(subject => this._subject = subject),
+      tap(subject => this.menus = subject.resources.filter(resource => !resource.pathExp === false).map(resource => resource.pathExp)),
+      tap(subject => this.permissions = subject.resources.filter(resource => !resource.permission === false)
+        .map(resource => resource.permission)),
+      tap(subject => this.groups = subject.groups.filter(group => !group.code === false).map(group => group.code)),
+      tap(() => this._authorized = true),
+      tap(subject => this.eventEmitter.emit(subject))
+    );
   }
 
   hasMenu(menu: string) {

@@ -1,0 +1,8 @@
+<div fxLayout fxLayoutAlign="start stretch" fxLayoutGap="8px">
+  <div [ngStyle]="{'color': message.context}">
+    <mat-icon>{{message.icon}}</mat-icon>
+  </div>
+  <div fxFlex="auto">
+    <div *ngFor="let line of message.messages">{{line}}</div>
+  </div>
+</div>

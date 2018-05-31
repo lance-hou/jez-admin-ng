@@ -15,8 +15,8 @@ import {
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {LayoutModule} from '@angular/cdk/layout';
-import {MessageContainerComponent} from './message/message-container/message-container.component';
 import {MessageService} from './message/message.service';
+import {MessageComponent} from './message/message.component';
 
 const IMPORTS = [
   CommonModule,
@@ -42,8 +42,8 @@ const EXPORTS = [
 
 @NgModule({
   imports: [...IMPORTS],
-  declarations: [MessageContainerComponent],
-  entryComponents: [MessageContainerComponent],
+  declarations: [MessageComponent],
+  entryComponents: [MessageComponent],
   exports: [...EXPORTS]
 })
 export class SharedModule {

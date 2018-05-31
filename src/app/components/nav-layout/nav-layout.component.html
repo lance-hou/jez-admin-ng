@@ -10,7 +10,7 @@
       <span style="padding-left: 10px">JEZ Admin</span>
     </mat-toolbar>
     <div class="nav-menu-container">
-      <app-nav-menu [root]="rootMenu" (menuClick)="active($event)"></app-nav-menu>
+      <app-nav-menu [menus]="menus" (menuClick)="active($event)"></app-nav-menu>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -22,20 +22,22 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="s-flex-fill"></span>
-      <mat-menu #userMenu [overlapTrigger]="false">
-        <button mat-menu-item>
-          <mat-icon>perm_identity</mat-icon>
-          <span>个人资料</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>security</mat-icon>
-          <span>修改密码</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item>
-          <mat-icon>power_settings_new</mat-icon>
-          <span>注销登录</span>
-        </button>
+      <mat-menu #userMenu [overlapTrigger]="false" xPosition="before">
+        <ng-template matMenuContent>
+          <button mat-menu-item>
+            <mat-icon>perm_identity</mat-icon>
+            <span>个人资料</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>security</mat-icon>
+            <span>修改密码</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>power_settings_new</mat-icon>
+            <span>注销登录</span>
+          </button>
+        </ng-template>
       </mat-menu>
       <button mat-button [matMenuTriggerFor]="userMenu">
         <span>{{user.username}}</span>

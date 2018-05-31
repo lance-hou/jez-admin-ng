@@ -8,13 +8,8 @@ import {SecurityService} from './modules/system/security/security.service';
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {ForbiddenComponent} from './components/forbidden/forbidden.component';
 import {SECURITY_OPTIONS} from './modules/system/security/security-options';
-import {ErrorComponent} from './components/error/error.component';
 
 const routes: Routes = [
-  {
-    path: 'error',
-    component: ErrorComponent
-  },
   {
     path: 'login',
     component: LoginComponent
@@ -41,17 +36,20 @@ const routes: Routes = [
         loadChildren: './modules/system/system.module#SystemModule'
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'not-found'
   }
 ];
 
-const securityOptions = {
+export const securityOptions = {
   loginUrl: '/login',
   notFoundUrl: '/not-found',
-  forbiddenUrl: '/forbidden',
-  navigateErrorUrl: '/error'
+  forbiddenUrl: '/forbidden'
 };
 
-function SecurityOptionsFactory() {
+export function SecurityOptionsFactory() {
   return securityOptions;
 }
 

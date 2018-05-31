@@ -1,3 +1,23 @@
-<mat-accordion *ngIf="root">
-  <app-nav-sub-menu [menus]="root.children" (menuClick)="menuClick.emit($event)"></app-nav-sub-menu>
+<mat-accordion *ngIf="menus && menus.length > 0">
+  <mat-list>
+    <ng-container *ngFor="let menu of menus">
+      <mat-list-item *ngIf="menu.leaf" (click)="menuClick.emit(menu)" class="s-cursor-pointer">
+        <button
+          mat-button
+          [ngClass]="{'active': menu.selected}"
+          [ngStyle]="{'padding-left': ((menu.level - 1) * 24) + 'px'}">
+          <mat-icon *ngIf="menu.icon">{{menu.icon}}</mat-icon>
+          <span>{{menu.text}}</span>
+        </button>
+      </mat-list-item>
+      <mat-expansion-panel *ngIf="!menu.leaf" [expanded]="menu.expanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span [ngStyle]="{'padding-left': ((menu.level - 2) * 24) + 'px'}">{{menu.text}}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-nav-menu [menus]="menu.children" (menuClick)="menuClick.emit($event)"></app-nav-menu>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-list>
 </mat-accordion>

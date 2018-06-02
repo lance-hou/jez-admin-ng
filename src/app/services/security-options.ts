@@ -1,6 +1,7 @@
 import {InjectionToken} from '@angular/core';
 
 export interface SecurityOptions {
+  rootUrl: string;
   loginUrl: string;
   notFoundUrl: string;
   forbiddenUrl: string;

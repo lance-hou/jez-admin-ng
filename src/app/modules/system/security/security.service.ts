@@ -35,7 +35,7 @@ export class SecurityService {
     if (remote) {
       this.httpClient.post('/logout', null).pipe(
         finalize(this.clear)
-      );
+      ).subscribe();
     } else {
       this.clear();
     }
@@ -53,13 +53,15 @@ export class SecurityService {
 
   authorize(): Observable<any> {
     return this.httpClient.get<Subject>('/subjects').pipe(
-      tap(subject => this._subject = subject),
-      tap(subject => this.menus = subject.resources.filter(resource => !resource.pathExp === false).map(resource => resource.pathExp)),
-      tap(subject => this.permissions = subject.resources.filter(resource => !resource.permission === false)
-        .map(resource => resource.permission)),
-      tap(subject => this.groups = subject.groups.filter(group => !group.code === false).map(group => group.code)),
-      tap(() => this._authorized = true),
-      tap(subject => this.eventEmitter.emit(subject))
+      tap(subject => {
+        this._subject = subject;
+        this.menus = subject.resources.filter(resource => !resource.pathExp === false).map(resource => resource.pathExp);
+        this.permissions = subject.resources.filter(resource => !resource.permission === false)
+          .map(resource => resource.permission);
+        this.groups = subject.groups.filter(group => !group.code === false).map(group => group.code);
+        this._authorized = true;
+        this.eventEmitter.emit(subject);
+      })
     );
   }
 

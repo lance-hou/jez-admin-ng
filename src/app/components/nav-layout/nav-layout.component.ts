@@ -7,7 +7,7 @@ import {User} from '../../modules/system/users/user';
 import {Menu} from '../nav-menu/menu';
 import {Resource} from '../../modules/system/resources/resource';
 import {Router} from '@angular/router';
-import {SECURITY_OPTIONS, SecurityOptions} from '../../modules/system/security/security-options';
+import {SECURITY_OPTIONS, SecurityOptions} from '../../services/security-options';
 import {MessageService} from '../../modules/shared/message/message.service';
 
 @Component({
@@ -17,14 +17,12 @@ import {MessageService} from '../../modules/shared/message/message.service';
 })
 export class NavLayoutComponent implements OnInit, OnDestroy {
 
-  private authorizationSubscription: Subscription;
+  private subscription: Subscription;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
     );
-
-  initialized = false;
 
   user: User;
   menus: Menu;
@@ -39,13 +37,16 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authorizationSubscription = this.securityService.subscribeAuthorization(this.initialize);
-    this.initialize();
+    this.subscription = this.securityService.subscribeAuthorization(() => this.initialize());
+    if (this.securityService.authorized) {
+      this.initialize();
+    }
   }
 
   ngOnDestroy(): void {
-    this.authorizationSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
+
 
   logout() {
     this.securityService.logout();
@@ -66,14 +67,14 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
 
   private initialize() {
     this.user = this.securityService.subject.user;
-    const idRefs = {}, convert2Menu = (resource: Resource): Menu => {
+    const idRefs = {}, convert2Menu = (resource: Resource, baseLevel = 0): Menu => {
       return {
         id: resource.id,
         parent: idRefs[resource.parentId],
         icon: resource.icon,
         text: resource.name,
         path: resource.pathExp,
-        level: resource.level,
+        level: resource.level - baseLevel,
         selected: false,
         expanded: false,
         leaf: true,
@@ -83,9 +84,9 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
     const routerUrl = this.router.url, defaultUrl = '/system/dicts';
     let root = null, parent = null, menu = null, children = null, routerMenu = null, defaultMenu = null, firstMenu = null;
     this.securityService.subject.resources.forEach(resource => {
-      menu = convert2Menu(resource);
+      menu = convert2Menu(resource, 1);
       idRefs[resource.id] = menu;
-      if (menu.level === 1) {
+      if (menu.level === 0) {
         root = menu;
         return;
       }
@@ -122,6 +123,5 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
       }
       this.active(activeMenu, noRouter);
     }
-    this.initialized = true;
   }
 }

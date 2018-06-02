@@ -3,11 +3,11 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './components/login/login.component';
 import {NavLayoutComponent} from './components/nav-layout/nav-layout.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
-import {SecurityGuard} from './modules/system/security/security-guard.service';
+import {SecurityGuard} from './services/security-guard.service';
 import {SecurityService} from './modules/system/security/security.service';
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {ForbiddenComponent} from './components/forbidden/forbidden.component';
-import {SECURITY_OPTIONS} from './modules/system/security/security-options';
+import {SECURITY_OPTIONS} from './services/security-options';
 
 const routes: Routes = [
   {
@@ -16,8 +16,9 @@ const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [SecurityGuard],
     component: NavLayoutComponent,
+    canActivate: [SecurityGuard],
+    canActivateChild: [SecurityGuard],
     children: [
       {
         path: 'dashboard',
@@ -43,7 +44,8 @@ const routes: Routes = [
   }
 ];
 
-export const securityOptions = {
+const securityOptions = {
+  rootUrl: '/',
   loginUrl: '/login',
   notFoundUrl: '/not-found',
   forbiddenUrl: '/forbidden'

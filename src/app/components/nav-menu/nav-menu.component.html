@@ -5,7 +5,7 @@
         <button
           mat-button
           [ngClass]="{'active': menu.selected}"
-          [ngStyle]="{'padding-left': ((menu.level - 1) * 24) + 'px'}">
+          [ngStyle]="{'padding-left': (24 + (menu.level - 1) * 24) + 'px'}">
           <mat-icon *ngIf="menu.icon">{{menu.icon}}</mat-icon>
           <span>{{menu.text}}</span>
         </button>
@@ -13,7 +13,7 @@
       <mat-expansion-panel *ngIf="!menu.leaf" [expanded]="menu.expanded">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <span [ngStyle]="{'padding-left': ((menu.level - 2) * 24) + 'px'}">{{menu.text}}</span>
+            <span [ngStyle]="{'padding-left': ((menu.level - 1) * 24) + 'px'}">{{menu.text}}</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <app-nav-menu [menus]="menu.children" (menuClick)="menuClick.emit($event)"></app-nav-menu>

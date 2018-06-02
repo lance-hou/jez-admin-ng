@@ -1,4 +1,4 @@
-<mat-sidenav-container *ngIf="initialized" class="sidenav-container">
+<mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     #drawer
     class="sidenav"
@@ -21,6 +21,7 @@
         (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
+      <span>{{activeMenu?.text}}</span>
       <span class="s-flex-fill"></span>
       <mat-menu #userMenu [overlapTrigger]="false" xPosition="before">
         <ng-template matMenuContent>
@@ -40,7 +41,7 @@
         </ng-template>
       </mat-menu>
       <button mat-button [matMenuTriggerFor]="userMenu">
-        <span>{{user.username}}</span>
+        <span>{{user?.username}}</span>
         <mat-icon>expand_more</mat-icon>
       </button>
     </mat-toolbar>

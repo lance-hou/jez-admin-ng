@@ -20,8 +20,8 @@ export class MessageService {
     if (typeof options === 'number') {
       options = {duration: options};
     }
-    options = Object.assign({panelClass: 's-message-container'}, options);
     return this.snackBar.openFromComponent(MessageComponent, {
+      panelClass: 's-message-container',
       data: {icon, context, messages: Array.isArray(content) ? content : [content]} as Message,
       ...options
     });

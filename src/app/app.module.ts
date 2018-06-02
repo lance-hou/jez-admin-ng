@@ -6,7 +6,14 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NavLayoutComponent} from './components/nav-layout/nav-layout.component';
-import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatMenuModule, MatSidenavModule} from '@angular/material';
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatMenuModule,
+  MatPaginatorModule,
+  MatSidenavModule,
+  MatSortModule,
+  MatTableModule
+} from '@angular/material';
 import {LoginComponent} from './components/login/login.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {SharedModule} from './modules/shared/shared.module';
@@ -14,7 +21,8 @@ import {NgMaterialMultilevelMenuModule} from 'ng-material-multilevel-menu';
 import {NavMenuComponent} from './components/nav-menu/nav-menu.component';
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {ForbiddenComponent} from './components/forbidden/forbidden.component';
-import {HandleErrorInterceptor} from './http/handle-error-interceptor';
+import {HandleErrorInterceptor} from './services/handle-error-interceptor';
+import {ExampleTableComponent} from './components/example-table/example-table.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +32,8 @@ import {HandleErrorInterceptor} from './http/handle-error-interceptor';
     NavMenuComponent,
     DashboardComponent,
     NotFoundComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    ExampleTableComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +43,10 @@ import {HandleErrorInterceptor} from './http/handle-error-interceptor';
     SharedModule.forRoot(),
     NgMaterialMultilevelMenuModule,
     MatSidenavModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     {

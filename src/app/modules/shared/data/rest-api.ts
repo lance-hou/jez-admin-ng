@@ -1,9 +1,10 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Page} from './page';
 import {Store} from './store';
 import {tap} from 'rxjs/operators';
 import {PageStore} from './page-store';
+import {filterHttpParams} from '../util/fn';
 
 export class SimpleStore<T> implements Store<T> {
 
@@ -80,17 +81,16 @@ export class RestApi<PK, T> {
   }
 
   query(parameters?: any, sort?: string): Observable<T[]> {
-    return this.httpClient.get<T[]>(this.url, {params: new HttpParams({fromObject: Object.assign({_sort: sort}, parameters)})});
+    return this.httpClient.get<T[]>(this.url, {params: filterHttpParams({_sort: sort, ...parameters})});
   }
 
   queryPage(parameters: any, page: number, size: number, sort?: string): Observable<Page<T>> {
     return this.httpClient.get<Page<T>>(this.url, {
-      params: new HttpParams({
-        fromObject: Object.assign({
-          _page: page,
-          _size: size,
-          _sort: sort
-        }, parameters)
+      params: filterHttpParams({
+        _page: page - 1,
+        _size: size,
+        _sort: sort,
+        ...parameters
       })
     });
   }

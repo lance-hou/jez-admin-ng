@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SecurityService} from '../../modules/system/security/security.service';
-import {ConfigService} from '../../modules/system/configs/config.service';
-import {MessageService} from '../../modules/shared/message/message.service';
+import {SecurityService} from '../../system/security/security.service';
+import {ConfigService} from '../../system/configs/config.service';
+import {MessageService} from '../../shared/message/message.service';
 import {map} from 'rxjs/operators';
-import {emptyLambda} from '../../modules/shared/util/fn';
+import {emptyLambda} from '../../shared/util/fn';
 
 @Component({
   selector: 'app-login',

@@ -10,7 +10,11 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
+  MatPaginatorModule,
   MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -29,6 +33,7 @@ const EXPORTS = [
   ...IMPORTS,
   FormsModule,
   ReactiveFormsModule,
+  LayoutModule,
   MatButtonModule,
   MatListModule,
   MatGridListModule,
@@ -37,7 +42,10 @@ const EXPORTS = [
   MatToolbarModule,
   MatSnackBarModule,
   MatExpansionModule,
-  LayoutModule
+  MatMenuModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule
 ];
 
 @NgModule({

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DictService} from '../dict.service';
 import {Dict} from '../dict';
-import {tap} from 'rxjs/operators';
 import {PageStore} from '../../../shared/data/page-store';
 
 @Component({
@@ -13,6 +12,8 @@ export class DictListComponent implements OnInit {
 
   parameters = {type: null, value: null, label: null};
   store: PageStore<Dict>;
+  columns = ['type', 'value', 'label', 'remarks', 'sort'];
+  headers = ['类型', '数据值', '标签', '备注', '排序值'];
 
   constructor(dictService: DictService) {
     this.store = dictService.createPageStore();
@@ -23,7 +24,7 @@ export class DictListComponent implements OnInit {
   }
 
   query() {
-    this.store.query({...this.parameters}).pipe(tap(data => console.log(data))).subscribe();
+    this.store.query({...this.parameters}).subscribe();
   }
 
 }

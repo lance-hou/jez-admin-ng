@@ -1,9 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {SecurityService} from '../modules/system/security/security.service';
 import {SECURITY_OPTIONS, SecurityOptions} from './security-options';
 import {map} from 'rxjs/operators';
+import {SecurityService} from '../../system/security/security.service';
 
 @Injectable()
 export class SecurityGuard implements CanActivate, CanActivateChild {

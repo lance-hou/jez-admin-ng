@@ -1,0 +1,20 @@
+<div class="s-page-container">
+  <mat-card>
+    <mat-table [dataSource]="store.content">
+      <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
+        <mat-header-cell *matHeaderCellDef>{{headers[i]}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row[column]}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator
+      [length]="store.totalElements"
+      [pageSize]="store.size"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [showFirstLastButtons]="true"
+      (page)="store.go($event.pageIndex, $event.pageSize).subscribe()">
+    </mat-paginator>
+  </mat-card>
+</div>

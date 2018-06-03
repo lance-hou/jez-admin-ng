@@ -2,13 +2,13 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {SecurityService} from '../../modules/system/security/security.service';
-import {User} from '../../modules/system/users/user';
+import {SecurityService} from '../../system/security/security.service';
+import {User} from '../../system/users/user';
 import {Menu} from '../nav-menu/menu';
-import {Resource} from '../../modules/system/resources/resource';
+import {Resource} from '../../system/resources/resource';
 import {Router} from '@angular/router';
-import {SECURITY_OPTIONS, SecurityOptions} from '../../services/security-options';
-import {MessageService} from '../../modules/shared/message/message.service';
+import {SECURITY_OPTIONS, SecurityOptions} from '../security/security-options';
+import {MessageService} from '../../shared/message/message.service';
 
 @Component({
   selector: 'app-nav-layout',

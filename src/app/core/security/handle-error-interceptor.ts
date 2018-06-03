@@ -1,12 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {MessageService} from '../modules/shared/message/message.service';
+import {MessageService} from '../../shared/message/message.service';
 import {Router} from '@angular/router';
-import {SecurityService} from '../modules/system/security/security.service';
+import {SecurityService} from '../../system/security/security.service';
 import {tap} from 'rxjs/operators';
 import {SECURITY_OPTIONS, SecurityOptions} from './security-options';
-import {emptyLambda} from '../modules/shared/util/fn';
+import {emptyLambda} from '../../shared/util/fn';
 
 @Injectable()
 export class HandleErrorInterceptor implements HttpInterceptor {

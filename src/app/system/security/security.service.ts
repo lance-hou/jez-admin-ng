@@ -6,7 +6,9 @@ import {Observable, Subscription} from 'rxjs';
 
 const FORM_DATA_HEADER = {headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')};
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SecurityService {
 
   private _authenticated = localStorage.getItem('authenticated') === 'true';

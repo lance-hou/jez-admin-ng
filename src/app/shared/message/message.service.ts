@@ -5,7 +5,9 @@ import {MessageOptions} from './message-options';
 import {Message} from './message';
 import {MessageComponent} from './message.component';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MessageService {
 
   constructor(private snackBar: MatSnackBar) {

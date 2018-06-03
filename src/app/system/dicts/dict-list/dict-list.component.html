@@ -1,13 +1,46 @@
 <div class="s-page-container">
   <mat-card>
-    <mat-table [dataSource]="store.content">
-      <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
-        <mat-header-cell *matHeaderCellDef>{{headers[i]}}</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row[column]}}</mat-cell>
+    <form (ngSubmit)="query()" class="s-form-inline">
+      <mat-form-field>
+        <input name="type" [(ngModel)]="parameters.type" matInput placeholder="类型">
+      </mat-form-field>
+      <mat-form-field>
+        <input name="value" [(ngModel)]="parameters.value" matInput placeholder="数据值">
+      </mat-form-field>
+      <mat-form-field>
+        <input name="label" [(ngModel)]="parameters.label" matInput placeholder="标签">
+      </mat-form-field>
+      <button mat-raised-button color="primary">
+        <mat-icon>search</mat-icon>
+        查询
+      </button>
+      <button mat-raised-button>
+        <mat-icon>add</mat-icon>
+        新建
+      </button>
+    </form>
+
+    <table mat-table [dataSource]="store.content" class="s-w-100">
+      <ng-container *ngFor="let column of columns.slice(0, 5); let i = index;" [matColumnDef]="column">
+        <th mat-header-cell *matHeaderCellDef>{{headers[i]}}</th>
+        <td mat-cell *matCellDef="let row">{{row[column]}}</td>
       </ng-container>
-      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
-    </mat-table>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>操作</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-raised-button>
+            <mat-icon>add</mat-icon>
+            编辑
+          </button>
+          <button mat-raised-button>
+            <mat-icon>add</mat-icon>
+            删除
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
 
     <mat-paginator
       [length]="store.totalElements"

@@ -35,9 +35,32 @@
   width: 100%;
 }
 
+.s-float-right {
+  float: right;
+}
+
+.s-float-left {
+  float: left;
+}
+
 .s-form {
 }
 
-.s-form .s-form-control {
-  display: block;
+.s-form .mat-form-field {
+  width: 100%;
+}
+
+.s-form-inline .mat-form-field {
+  margin-right: 1.25em;
+}
+
+.s-form-inline > button + button {
+  margin-left: 1.25rem;
+}
+
+@media (max-width: 599px) {
+  .s-form-inline .mat-form-field {
+    margin-right: 0;
+    width: 100%;
+  }
 }

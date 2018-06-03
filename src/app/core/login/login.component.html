@@ -2,11 +2,11 @@
   <div fxLayout fxLayoutAlign="center" fxFlex="none">
     <div fxFlex="none" fxFlex.xs class="login-container">
       <form [formGroup]="form" (ngSubmit)="login()" class="s-form">
-        <mat-form-field class="s-form-control">
+        <mat-form-field>
           <input formControlName="username" matInput placeholder="用户名">
           <mat-icon matSuffix>person</mat-icon>
         </mat-form-field>
-        <mat-form-field class="s-form-control">
+        <mat-form-field>
           <input formControlName="password" matInput [type]="showPassword ? 'text' : 'password'" placeholder="密 码">
           <mat-icon matSuffix (click)="showPassword = !showPassword" class="s-cursor-pointer">
             {{showPassword ? 'visibility_off' : 'visibility'}}

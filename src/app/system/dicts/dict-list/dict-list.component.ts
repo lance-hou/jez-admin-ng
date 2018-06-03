@@ -12,8 +12,8 @@ export class DictListComponent implements OnInit {
 
   parameters = {type: null, value: null, label: null};
   store: PageStore<Dict>;
-  columns = ['type', 'value', 'label', 'remarks', 'sort'];
-  headers = ['类型', '数据值', '标签', '备注', '排序值'];
+  columns = ['type', 'value', 'label', 'remarks', 'sort', 'actions'];
+  headers = ['类型', '数据值', '标签', '备注', '排序值', '操作'];
 
   constructor(dictService: DictService) {
     this.store = dictService.createPageStore();

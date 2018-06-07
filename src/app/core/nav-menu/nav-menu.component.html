@@ -10,7 +10,7 @@
           <span>{{menu.text}}</span>
         </button>
       </mat-list-item>
-      <mat-expansion-panel *ngIf="!menu.leaf" [expanded]="menu.expanded">
+      <mat-expansion-panel *ngIf="!menu.leaf" [(expanded)]="menu.expanded">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span [ngStyle]="{'padding-left': ((menu.level - 1) * 24) + 'px'}">{{menu.text}}</span>

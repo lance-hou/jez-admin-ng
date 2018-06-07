@@ -10,3 +10,12 @@
 .nav-menu-container {
   padding-top: 24px;
 }
+
+.tab-close-button {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  display: inline-block;
+  padding: 12px;
+  font-size: 1.25em;
+}

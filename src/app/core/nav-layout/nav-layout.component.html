@@ -21,7 +21,6 @@
         (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <span>{{activeMenu?.text}}</span>
       <span class="s-flex-fill"></span>
       <mat-menu #userMenu [overlapTrigger]="false" xPosition="before">
         <ng-template matMenuContent>
@@ -45,6 +44,19 @@
         <mat-icon>expand_more</mat-icon>
       </button>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <mat-tab-group [selectedIndex]="activeIdx" (selectedIndexChange)="activeTab($event)">
+      <mat-tab *ngFor="let menu of reuseTabStore.menus; let idx = index">
+        <ng-template mat-tab-label>
+          <span>{{menu.text}}</span>
+          <span
+            *ngIf="reuseTabStore.menus.length > 1"
+            (click)="closeTab(idx); $event.stopPropagation()"
+            class="tab-close-button">
+            x
+          </span>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+    <router-outlet *ngIf="initialized"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

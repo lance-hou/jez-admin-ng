@@ -5,8 +5,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {HandleErrorInterceptor} from './http/handle-error-interceptor';
 import {CommonModule} from '@angular/common';
 import {RouteReuseStrategy} from '@angular/router';
-import {DynamicRouteReuseStrategy} from '../shared/route/dynamic-route-reuse-strategy.service';
-import {ROUTE_REUSE_STORE} from '../shared/route/route-reuse-store';
+import {DynamicRouteReuseStrategy} from './route/dynamic-route-reuse-strategy.service';
 import {ReuseTabStore} from './route/reuse-tab-store.service';
 
 const matPaginatorIntl = new MatPaginatorIntl();
@@ -54,10 +53,7 @@ export class CoreModule {
           provide: MatPaginatorIntl,
           useFactory: MatPaginatorIntlFactory
         },
-        {
-          provide: ROUTE_REUSE_STORE,
-          useClass: ReuseTabStore
-        },
+        ReuseTabStore,
         {
           provide: RouteReuseStrategy,
           useClass: DynamicRouteReuseStrategy

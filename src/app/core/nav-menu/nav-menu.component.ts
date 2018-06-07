@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {Menu} from './menu';
+import {MatExpansionPanel} from '@angular/material';
 
 @Component({
   selector: 'app-nav-menu',
@@ -38,6 +39,10 @@ import {Menu} from './menu';
 })
 export class NavMenuComponent implements OnInit {
 
+  @ViewChildren(MatExpansionPanel) expansionPanels: QueryList<MatExpansionPanel>;
+
+  @ViewChildren(NavMenuComponent) navMenus: QueryList<NavMenuComponent>;
+
   @Input() menus: Menu[];
 
   @Output() menuClick = new EventEmitter<Menu>();
@@ -46,6 +51,20 @@ export class NavMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  open(menu: Menu): boolean {
+    const menus = this.menus.filter(m => !m.leaf);
+    for (let i = 0; i < menus.length; i++) {
+      if (menus[i] === menu) {
+        this.expansionPanels.toArray()[i].open();
+        return true;
+      }
+      if (this.navMenus.toArray()[i].open(menu)) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

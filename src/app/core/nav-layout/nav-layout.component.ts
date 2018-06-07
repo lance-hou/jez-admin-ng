@@ -1,7 +1,7 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable, Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {SecurityService} from '../../system/security/security.service';
 import {User} from '../../system/users/user';
 import {Menu} from '../nav-menu/menu';
@@ -9,7 +9,10 @@ import {Resource} from '../../system/resources/resource';
 import {Router} from '@angular/router';
 import {SECURITY_OPTIONS, SecurityOptions} from '../../system/security/security-options';
 import {MessageService} from '../../shared/message/message.service';
-import {ROUTE_STORE, RouteStore} from '../../shared/route/route-store';
+import {ReuseTabStore} from '../route/reuse-tab-store.service';
+import {NavMenuComponent} from '../nav-menu/nav-menu.component';
+import {MatSidenav} from '@angular/material';
+import {emptyLambda} from '../../shared/util/fn';
 
 @Component({
   selector: 'app-nav-layout',
@@ -18,21 +21,28 @@ import {ROUTE_STORE, RouteStore} from '../../shared/route/route-store';
 })
 export class NavLayoutComponent implements OnInit, OnDestroy {
 
+  @ViewChild(MatSidenav) sideNav: MatSidenav;
+  @ViewChild(NavMenuComponent) navMenu: NavMenuComponent;
+
   private subscription: Subscription;
+  private isHandSet: boolean;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
+      tap(result => this.isHandSet = result.matches),
       map(result => result.matches)
     );
 
+  initialized = false;
   user: User;
   menus: Menu;
   activeMenu: Menu;
+  activeIdx = 0;
 
   constructor(
+    public reuseTabStore: ReuseTabStore,
     private breakpointObserver: BreakpointObserver,
     @Inject(SECURITY_OPTIONS) private securityOptions: SecurityOptions,
-    @Inject(ROUTE_STORE) private routeStore: RouteStore,
     private securityService: SecurityService,
     private messageService: MessageService,
     private router: Router) {
@@ -49,7 +59,6 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-
   logout() {
     this.securityService.logout();
     this.messageService.info('注销成功！');
@@ -63,9 +72,27 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
     this.activeMenu = menu;
     this.activeMenu.selected = true;
     if (doNavigation) {
-      this.routeStore.add(menu.path);
+      this.activeIdx = this.reuseTabStore.add(menu);
       this.router.navigate([menu.path]);
     }
+    if (this.isHandSet) {
+      this.sideNav.close().catch(emptyLambda);
+    }
+  }
+
+  activeTab(idx: number): void {
+    if (idx !== this.activeIdx) {
+      const menu = this.reuseTabStore.menus[idx];
+      if (menu.parent !== undefined) {
+        this.navMenu.open(menu.parent);
+      }
+      this.active(this.reuseTabStore.menus[idx]);
+    }
+  }
+
+  closeTab(idx: number): void {
+    this.reuseTabStore.remove(idx);
+    this.activeTab(idx === 0 ? idx + 1 : idx - 1);
   }
 
   private initialize() {
@@ -116,15 +143,25 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
         defaultMenu = menu;
       }
     });
+    defaultMenu = defaultMenu || firstMenu;
     this.menus = root ? root.children : null;
-    const noRouter = routerUrl === '/', activeMenu = noRouter ? defaultMenu || firstMenu : routerMenu;
+    const isRoot = routerUrl === '/', isRouterValid = !!routerMenu;
+    if (!isRoot && isRouterValid) {
+      this.activeIdx = this.reuseTabStore.add(routerMenu);
+    }
+    const activeMenu = isRoot ? defaultMenu : isRouterValid ? routerMenu : defaultMenu;
     if (activeMenu !== null) {
-      parent = activeMenu.parent;
-      while (parent !== undefined) {
-        parent.expanded = true;
-        parent = parent.parent;
-      }
-      this.active(activeMenu, noRouter);
+      this.expandMenu(activeMenu);
+      this.active(activeMenu, isRoot || !isRouterValid);
+    }
+    this.initialized = true;
+  }
+
+  private expandMenu(menu: Menu) {
+    let parent = menu.parent;
+    while (parent !== undefined) {
+      parent.expanded = true;
+      parent = parent.parent;
     }
   }
 }

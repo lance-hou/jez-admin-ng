@@ -3,7 +3,7 @@ import {Message} from './message';
 import {MAT_SNACK_BAR_DATA} from '@angular/material';
 
 @Component({
-  selector: 'app-message',
+  selector: 'srd-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css']
 })

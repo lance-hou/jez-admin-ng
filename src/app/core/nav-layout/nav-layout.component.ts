@@ -7,8 +7,9 @@ import {User} from '../../system/users/user';
 import {Menu} from '../nav-menu/menu';
 import {Resource} from '../../system/resources/resource';
 import {Router} from '@angular/router';
-import {SECURITY_OPTIONS, SecurityOptions} from '../security/security-options';
+import {SECURITY_OPTIONS, SecurityOptions} from '../../system/security/security-options';
 import {MessageService} from '../../shared/message/message.service';
+import {ROUTE_STORE, RouteStore} from '../../shared/route/route-store';
 
 @Component({
   selector: 'app-nav-layout',
@@ -31,6 +32,7 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     @Inject(SECURITY_OPTIONS) private securityOptions: SecurityOptions,
+    @Inject(ROUTE_STORE) private routeStore: RouteStore,
     private securityService: SecurityService,
     private messageService: MessageService,
     private router: Router) {
@@ -61,6 +63,7 @@ export class NavLayoutComponent implements OnInit, OnDestroy {
     this.activeMenu = menu;
     this.activeMenu.selected = true;
     if (doNavigation) {
+      this.routeStore.add(menu.path);
       this.router.navigate([menu.path]);
     }
   }

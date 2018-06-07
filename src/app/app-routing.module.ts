@@ -3,10 +3,10 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './core/login/login.component';
 import {NavLayoutComponent} from './core/nav-layout/nav-layout.component';
 import {DashboardComponent} from './core/dashboard/dashboard.component';
-import {SecurityGuard} from './core/security/security-guard.service';
+import {SecurityGuard} from './system/security/security-guard.service';
 import {NotFoundComponent} from './core/not-found/not-found.component';
 import {ForbiddenComponent} from './core/forbidden/forbidden.component';
-import {SECURITY_OPTIONS} from './core/security/security-options';
+import {SECURITY_OPTIONS} from './system/security/security-options';
 
 const routes: Routes = [
   {
@@ -17,7 +17,6 @@ const routes: Routes = [
     path: '',
     component: NavLayoutComponent,
     canActivate: [SecurityGuard],
-    canActivateChild: [SecurityGuard],
     children: [
       {
         path: 'dashboard',
@@ -30,9 +29,9 @@ const routes: Routes = [
       {
         path: 'forbidden',
         component: ForbiddenComponent
-      },
-      {
+      }, {
         path: 'system',
+        canActivateChild: [SecurityGuard],
         loadChildren: './system/system.module#SystemModule'
       }
     ]

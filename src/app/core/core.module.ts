@@ -2,8 +2,12 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {SharedModule} from '../shared/shared.module';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatPaginatorIntl, MatSidenavModule} from '@angular/material';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {HandleErrorInterceptor} from './security/handle-error-interceptor';
+import {HandleErrorInterceptor} from './http/handle-error-interceptor';
 import {CommonModule} from '@angular/common';
+import {RouteReuseStrategy} from '@angular/router';
+import {DynamicRouteReuseStrategy} from '../shared/route/dynamic-route-reuse-strategy.service';
+import {ROUTE_REUSE_STORE} from '../shared/route/route-reuse-store';
+import {ReuseTabStore} from './route/reuse-tab-store.service';
 
 const matPaginatorIntl = new MatPaginatorIntl();
 Object.assign(matPaginatorIntl, {
@@ -49,6 +53,14 @@ export class CoreModule {
         {
           provide: MatPaginatorIntl,
           useFactory: MatPaginatorIntlFactory
+        },
+        {
+          provide: ROUTE_REUSE_STORE,
+          useClass: ReuseTabStore
+        },
+        {
+          provide: RouteReuseStrategy,
+          useClass: DynamicRouteReuseStrategy
         }
       ]
     };

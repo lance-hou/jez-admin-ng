@@ -4,7 +4,7 @@ import {Dict} from '../dict';
 import {PageStore} from '../../../shared/data/page-store';
 
 @Component({
-  selector: 'app-dict-list',
+  selector: 'sys-dict-list',
   templateUrl: './dict-list.component.html',
   styleUrls: ['./dict-list.component.css']
 })

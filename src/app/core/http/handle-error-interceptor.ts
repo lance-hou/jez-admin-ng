@@ -5,7 +5,7 @@ import {MessageService} from '../../shared/message/message.service';
 import {Router} from '@angular/router';
 import {SecurityService} from '../../system/security/security.service';
 import {tap} from 'rxjs/operators';
-import {SECURITY_OPTIONS, SecurityOptions} from './security-options';
+import {SECURITY_OPTIONS, SecurityOptions} from '../../system/security/security-options';
 import {emptyLambda} from '../../shared/util/fn';
 
 @Injectable()

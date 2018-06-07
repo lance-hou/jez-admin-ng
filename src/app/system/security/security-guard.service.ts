@@ -3,7 +3,8 @@ import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterSta
 import {Observable} from 'rxjs';
 import {SECURITY_OPTIONS, SecurityOptions} from './security-options';
 import {map} from 'rxjs/operators';
-import {SecurityService} from '../../system/security/security.service';
+import {SecurityService} from './security.service';
+import {SecurityGuardType} from './security-guard-type';
 
 @Injectable()
 export class SecurityGuard implements CanActivate, CanActivateChild {
@@ -31,18 +32,35 @@ export class SecurityGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    const url = state.url;
-    if (url.startsWith(this.securityOptions.notFoundUrl) || url.startsWith(this.securityOptions.forbiddenUrl)) {
+    const guard: SecurityGuardType | false = route.firstChild !== null ? route.firstChild.data.guard : route.data.guard;
+    if (guard === false) {
       return true;
     }
-    return this.hasMenu(url);
-  }
-
-  private hasMenu(url): boolean {
-    const canActivate = this.securityService.hasMenu(url);
+    let canActivate: Observable<boolean> | Promise<boolean> | boolean;
+    if (guard !== undefined) {
+      switch (guard.type) {
+        case 'url':
+          canActivate = this.securityService.hasMenu(state.url);
+          break;
+        case 'permission':
+          canActivate = this.securityService.hasPermission(guard.value);
+          break;
+        case 'group':
+          canActivate = this.securityService.hasGroup(guard.value);
+          break;
+        case 'resolve':
+          canActivate = guard.resolve(this.securityService, route, state);
+          break;
+        default:
+          canActivate = this.securityService.hasMenu(state.url);
+          break;
+      }
+    } else {
+      canActivate = this.securityService.hasMenu(state.url);
+    }
     if (!canActivate) {
       const redirectUrl = this.securityOptions.forbiddenUrl;
-      this.router.navigate([redirectUrl, {url}]);
+      this.router.navigate([redirectUrl, {url: state.url}]);
     }
     return canActivate;
   }

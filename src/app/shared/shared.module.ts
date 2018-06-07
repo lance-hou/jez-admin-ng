@@ -25,6 +25,7 @@ import {MessageComponent} from './message/message.component';
 const IMPORTS = [
   CommonModule,
   MatCardModule,
+  MatButtonModule,
   MatIconModule,
   FlexLayoutModule
 ];
@@ -34,7 +35,6 @@ const EXPORTS = [
   FormsModule,
   ReactiveFormsModule,
   LayoutModule,
-  MatButtonModule,
   MatListModule,
   MatGridListModule,
   MatInputModule,
